@@ -5,14 +5,13 @@
 #ifndef ACTION_H
 #define ACTION_H
 
-#include <QCoreApplication>
 #include <QTime>
 
 class Action: public QTime {
 
   private:
 
-    int duration;
+    int duration;  // в минутах
     std::string name;
 
   protected:
