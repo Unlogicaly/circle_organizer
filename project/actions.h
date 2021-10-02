@@ -7,17 +7,13 @@
 
 #include "action.h"
 
-enum class SportType {
-    Other = -1, Football, Basketball, Volleyball, Skiing, Jogging
-};
-
 class Sports: public Action {
 
   private:
 
     SportType sport_type{SportType::Other};
 
-    const static int id = 1;
+    const static int id = 2;
 
   public:
 
@@ -28,6 +24,10 @@ class Sports: public Action {
 
     void set_type(SportType sport_type);
 
+    void get_params(Parameters &params) override {
+        params.sport_type = &this->sport_type;
+    }
+
     int get_id() const override;
 };
 
@@ -35,7 +35,7 @@ class Food: public Action {
 
   private:
 
-    const static int id = 2;
+    const static int id = 3;
 
   public:
 
@@ -64,5 +64,21 @@ class Other: public Action{
 
     int get_id() const override;
 };
+
+class Note: public Action{
+
+  private:
+
+    const static int id = 1;
+
+  private:
+
+    Note(std::string &&name): Action(0, 0, 0, std::move(name)) {}
+
+    Note(Action &&action) : Action(std::move(action)) {}
+
+    int get_id() const override;
+};
+
 
 #endif //UNTITLED_ACTIONS_H

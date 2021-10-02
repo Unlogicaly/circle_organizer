@@ -23,3 +23,8 @@ int Other::get_id() const {
 
     return Other::id;
 }
+
+int Note::get_id() const {
+
+    return Note::id;
+}

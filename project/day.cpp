@@ -42,3 +42,18 @@ void Day::create_event(QTime time) {
 
     events.insert(std::make_unique<Other>(time.hour(), time.minute(), 1, ""));
 }
+
+void Day::change_event(int h, int m, int duration, std::string &&name) {
+
+    (*current_event)->set_time(h, m);
+    (*current_event)->set_duration(duration);
+    (*current_event)->set_name(std::move(name));
+}
+
+Day::Day(int year, int month, int day) : QDate(year, month, day) {
+}
+
+const Action &Day::get_current_action() {
+
+    return **current_event;
+}
