@@ -6,6 +6,7 @@
 #define UNTITLED_ACTIONS_H
 
 #include "action.h"
+#include <stdexcept>
 
 class Sports: public Action {
 
@@ -17,19 +18,16 @@ class Sports: public Action {
 
   public:
 
-    Sports(int h, int m, int duration, std::string &&name):
-            Action(h, m, duration, std::move(name)) {}
+    Sports(int h, int m, int duration, std::string &&name);
 
-    Sports(Action &&action): Action(std::move(action)) {}
+    explicit Sports(Action &&action): Action(std::move(action)) {}
 
-    void set_type(SportType sport_type);
-
-    void get_params(Parameters &params) override {
-        params.sport_type = &this->sport_type;
-    }
+    void get_params(Parameters &params) override;
+    void set_params(Parameters &params) override;
 
     int get_id() const override;
 };
+
 
 class Food: public Action {
 
@@ -39,14 +37,13 @@ class Food: public Action {
 
   public:
 
-    Food(int h, int m, int duration, std::string &&name):
-            Action(h, m, duration, std::move(name)) {
-    }
+    Food(int h, int m, int duration, std::string &&name);
 
-    Food(Action &&action): Action(std::move(action)) {}
+    explicit Food(Action &&action): Action(std::move(action)) {}
 
     int get_id() const override;
 };
+
 
 class Other: public Action{
 
@@ -56,14 +53,13 @@ class Other: public Action{
 
   public:
 
-    Other(int h, int m, int duration, std::string &&name):
-            Action(h, m, duration, std::move(name)) {
-    }
+    Other(int h, int m, int duration, std::string &&name);
 
-    Other(Action &&action): Action(std::move(action)) {}
+    explicit Other(Action &&action): Action(std::move(action)) {}
 
     int get_id() const override;
 };
+
 
 class Note: public Action{
 
@@ -71,14 +67,21 @@ class Note: public Action{
 
     const static int id = 1;
 
-  private:
+  public:
 
-    Note(std::string &&name): Action(0, 0, 0, std::move(name)) {}
+    explicit Note(std::string &&name): Action(0, 0, 0, std::move(name)) {}
 
-    Note(Action &&action) : Action(std::move(action)) {}
+    explicit Note(Action &&action): Action(std::move(action)) {
+
+        setHMS(0, 0, 0);
+        set_duration(0);
+    }
 
     int get_id() const override;
 };
+
+
+std::unique_ptr<Action> change_type(Action *action, int id);
 
 
 #endif //UNTITLED_ACTIONS_H

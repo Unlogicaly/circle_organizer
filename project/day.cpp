@@ -15,12 +15,19 @@ decltype(Day::current_event) Day::find_event(QTime time) {
 
     auto iter = events.begin();
 
+    Parameters params{};  // В будущем будет частью глобального класса. Не забыть убрать
+
     for (; iter != events.end(); ++iter) {
 
-        if ((*iter)->get_time() <= time and
-            time < (*iter)->get_time().addSecs((*iter)->get_duration() * 60)) {
+        (*iter)->get_params(params);
+
+        QTime time_cur(params.h, params.m, 0);
+
+        if (time_cur <= time and
+            time < time_cur.addSecs(params.duration * 60)) {
 
             current_event = iter;
+            return iter;
         }
     }
 
@@ -32,28 +39,27 @@ void Day::delete_event() {
     events.erase(current_event);
 }
 
-template <typename T>
-void Day::change_event_type() {
-
-    *current_event = (*current_event)->change_type<T>();
-}
-
 void Day::create_event(QTime time) {
 
-    events.insert(std::make_unique<Other>(time.hour(), time.minute(), 1, ""));
-}
-
-void Day::change_event(int h, int m, int duration, std::string &&name) {
-
-    (*current_event)->set_time(h, m);
-    (*current_event)->set_duration(duration);
-    (*current_event)->set_name(std::move(name));
+    current_event = events.insert(std::make_unique<Other>(time.hour(), time.minute(), 1, "")).first;
 }
 
 Day::Day(int year, int month, int day) : QDate(year, month, day) {
 }
 
-const Action &Day::get_current_action() {
+void Day::get_current_params(Parameters &params) {
 
-    return **current_event;
+    (*current_event)->get_params(params);
+}
+
+void Day::set_current_params(Parameters &params) {
+
+    (*current_event)->set_params(params);
+}
+
+void Day::set_current_type(int id) {
+
+    auto new_event = events.insert(current_event, change_type((*current_event).get(), id));
+    events.erase(current_event);
+    current_event = new_event;
 }

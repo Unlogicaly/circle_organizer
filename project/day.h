@@ -23,16 +23,13 @@ class Day: public QDate {
 
     Day(int year, int month, int day);
 
-    template<typename T>
-    void change_event_type();
-
-    void change_event(int h, int m, int duration, std::string &&name);
+    void get_current_params(Parameters &params);
+    void set_current_params(Parameters &params);
 
     bool select_event(QTime time);
-
     void create_event(QTime time);
 
-    const Action &get_current_action();
+    void set_current_type(int id);
 
     void delete_event();
 };

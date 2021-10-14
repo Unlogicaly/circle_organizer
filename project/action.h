@@ -18,25 +18,19 @@ class Action: public QTime {
   protected:
 
     Action(int h, int m, int duration, std::string &&name);
-    Action(Action &&action);
+    Action(Action &&action) noexcept ;
+
+    void get_default_params(Parameters &params);
+    void set_default_params(Parameters &params);
 
   public:
 
-    const std::string &get_name() const;
     virtual int get_id() const = 0;
-    QTime get_time() const;
-    int get_duration() const;
-    virtual void get_params(Parameters &params) {}
-
-    void set_name(std::string &&name);
-    void set_time(int h, int m);
     void set_duration(int duration);
 
-    template<typename T>
-    std::unique_ptr<T> change_type() {
+    virtual void get_params(Parameters &params);
 
-        return std::make_unique<T>(std::move(*this));
-    }
+    virtual void set_params(Parameters &params);
 };
 
 #endif // ACTION_H

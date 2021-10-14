@@ -11,8 +11,12 @@ enum class SportType {
 
 struct Parameters{
 
-    std::vector<std::string>* products_list{nullptr};
-    SportType* sport_type{nullptr};
+    std::string name;
+    int h, m, duration;
+    int id;
+
+    std::vector<std::string> products_list{};
+    SportType sport_type{};
 };
 
 #endif //UNTITLED_PARAMETERS_H
