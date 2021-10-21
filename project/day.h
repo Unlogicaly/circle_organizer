@@ -22,6 +22,7 @@ class Day: public QDate {
   public:
 
     Day(int year, int month, int day);
+    Day(QDate date);
 
     void get_current_params(Parameters &params);
     void set_current_params(Parameters &params);

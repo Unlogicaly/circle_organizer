@@ -47,6 +47,10 @@ void Day::create_event(QTime time) {
 Day::Day(int year, int month, int day) : QDate(year, month, day) {
 }
 
+Day::Day(QDate date): QDate(date) {
+
+}
+
 void Day::get_current_params(Parameters &params) {
 
     (*current_event)->get_params(params);
