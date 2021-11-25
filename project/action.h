@@ -7,6 +7,7 @@
 
 #include <QTime>
 #include "parameters.h"
+#include <fstream>
 
 class Action: public QTime {
 
@@ -29,8 +30,9 @@ class Action: public QTime {
     void set_duration(int duration);
 
     virtual void get_params(Parameters &params);
-
     virtual void set_params(Parameters &params);
+
+    virtual void parse(std::ifstream &is);
 };
 
 #endif // ACTION_H

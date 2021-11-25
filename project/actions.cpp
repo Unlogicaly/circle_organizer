@@ -26,6 +26,16 @@ void Sports::set_params(Parameters &params) {
     sport_type = params.sport_type;
 }
 
+void Sports::parse(std::ifstream &is) {
+
+    Action::parse(is);
+
+    int sport_type_num = 0;
+    is >> sport_type_num;
+
+    sport_type = static_cast<SportType>(sport_type_num);
+}
+
 //---------------------Food------------------------------
 
 int Food::get_id() const {

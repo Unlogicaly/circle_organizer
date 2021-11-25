@@ -67,3 +67,8 @@ void Day::set_current_type(int id) {
     events.erase(current_event);
     current_event = new_event;
 }
+
+void Day::parse_current(std::ifstream &is) {
+
+    (*current_event)->parse(is);
+}

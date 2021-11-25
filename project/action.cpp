@@ -46,3 +46,10 @@ void Action::set_duration(int dur) {
 
     this->duration = dur;
 }
+
+void Action::parse(std::ifstream &is) {
+
+    is >> duration;
+    std::getline(is, name);
+    std::getline(is, name);
+}

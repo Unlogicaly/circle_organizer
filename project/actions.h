@@ -25,6 +25,8 @@ class Sports: public Action {
     void get_params(Parameters &params) override;
     void set_params(Parameters &params) override;
 
+    void parse(std::ifstream &is) override;
+
     int get_id() const override;
 };
 

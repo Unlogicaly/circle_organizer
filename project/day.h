@@ -31,6 +31,7 @@ class Day: public QDate {
     void create_event(QTime time);
 
     void set_current_type(int id);
+    void parse_current(std::ifstream &is);  // Можно сделать класс парсера, включить его в состав параметров действия и передавать вместе с остальными параметрами
 
     void delete_event();
 };

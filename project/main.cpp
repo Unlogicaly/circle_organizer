@@ -13,7 +13,7 @@ inline bool exists(const std::string& name) {
 
 class OrgGlob {
 
-  private:
+  public:
 
     Parameters params;
 
@@ -23,26 +23,29 @@ class OrgGlob {
 
       private:
 
+        Parameters *params;
+
         std::vector<std::unique_ptr<Day>> days; // Initially current day +- 30 days
 
         void expand(QDate date);
 
         void load(QDate date, int position);
 
-        void read_file(std::ifstream &is);
-
       public:
 
         std::unique_ptr<Day>* get_day(QDate date);
 
-        explicit Org(QDate date);
+        explicit Org(QDate date, Parameters *params);
     };
 
     Org org;
 
   public:
 
+    explicit OrgGlob(QDate date): params(), org(date, &params) {
 
+        current_day = org.get_day(date);
+    }
 };
 
 std::unique_ptr<Day> *OrgGlob::Org::get_day(QDate date) {
@@ -72,7 +75,7 @@ std::unique_ptr<Day> *OrgGlob::Org::get_day(QDate date) {
     return &days[num];
 }
 
-OrgGlob::Org::Org(QDate date) : days(61) {
+OrgGlob::Org::Org(QDate date, Parameters *params) : days(61), params{params} {
 
     days.reserve(365);
 
@@ -90,26 +93,37 @@ void OrgGlob::Org::load(QDate date, int position) {
 
     std::string path{R"(C:\circle_organizer\days\)" + date.toString("dd.MM.yyyy").toStdString() + ".txt"};
 
+    days[position] = std::make_unique<Day>(date);
+
     if (exists(path)) {
 
-        // to be implemented
+        std::ifstream is(path);
+
+        int h, m, duration, id;
+        std::string name;
+
+        while(true) {
+
+            is >> h >> m >> id;
+
+            if (not is.good())
+                break;
+
+            days[position]->create_event({h, m, 0});
+            days[position]->set_current_type(id);
+
+            days[position]->parse_current(is);
+        }
     }
-}
-
-void OrgGlob::Org::read_file(std::ifstream &is) {  // Stopped working here
-
-    char checker;
-
-    // to be implemented
 }
 
 int main(int argc, char *argv[]) {
 
-    QDate date{2021, 10, 21};
+    OrgGlob org_glob{{2021, 10, 21}};
 
-    std::string path{R"(C:\circle_organizer\days\)" + date.toString("dd.MM.yyyy").toStdString() + ".txt"};
+    org_glob.current_day->get()->get_current_params(org_glob.params);
 
-    std::cout << path << " " << exists(path);
+    std::cout << org_glob.params.name;
 
     return 0;
 }
